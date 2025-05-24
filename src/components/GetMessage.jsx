@@ -47,7 +47,7 @@ export default function VoiceRecorder() {
       const formData = new FormData();
       console.log('Type : ', audioBlob.mimeType)
       formData.append("audio", audioBlob, "message.webm");
-      const resultText = await fetch("http://127.0.0.1:5000/understand-message-google", {
+      const resultText = await fetch("http://35.173.186.121:5000/understand-message-google", {
         method: "POST",
         body: formData,
       });
