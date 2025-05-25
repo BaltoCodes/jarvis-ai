@@ -1,12 +1,5 @@
 @import "tailwindcss";
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -41,4 +34,67 @@
 
 .read-the-docs {
   color: #888;
+}
+
+
+
+
+
+.App {
+  text-align: center;
+}
+
+/* Animation des vagues */
+.wave {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url("data:image/svg+xml;utf8,<svg viewBox='0 -70 1200 120' xmlns='http://www.w3.org/2000/svg'><path d='M0 120V73.71c47.79-22.2 103.59-32.17 158-28 70.36 5.37 136.33 33.31 206.8 37.5 73.84 4.36 147.54-16.88 218.2-35.26 69.27-18 138.3-24.88 209.4-13.08 36.15 6 69.85 17.84 104.45 29.34C989.49 95 1113 134.29 1200 67.53V120z' fill='%23080606' opacity='.25'/></svg>");
+  background-size: 1200px 100%;
+  animation: wave 15s linear infinite;
+}
+
+.wave:nth-of-type(2) {
+  bottom: 0;
+  animation: wave 20s linear reverse infinite;
+  opacity: 0.5;
+}
+
+.wave:nth-of-type(3) {
+  bottom: 0;
+  animation: wave 25s linear infinite;
+  opacity: 0.2;
+}
+
+@keyframes wave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Effet de lueur pour le titre */
+.glow {
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.7), 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+/* Effet de pulsation pour le bouton d'enregistrement */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
 }
