@@ -1,12 +1,24 @@
-# React + Vite
+# Jarvis AI
+### Overview
+This project is Jarvis. It uses Google Speech to text API to translate user input then pass the prompt to DeepSeek. Answer is streamed ans then printed on the user page. 
+It uses Vite for Frontend and Python Flask for backend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+# Installation
+Requirements : 
+- Have Node and Vite. Tailwind also required.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To install this project : 
+```
+git clone jarvis-ai
+npm run install
+```
 
-## Expanding the ESLint configuration
+Then if you wish to try the project locally
+```
+npm run dev
+```
+It will listen on port 5173
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+# Contribution
+If you wish to contribute please feel free

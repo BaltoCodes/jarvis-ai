@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import './App.css';
 import socket from "./socket";
+import PrivacyPopup from './components/PrivacyPopUp';
 
 function App() {
   const [isMobile, setIsMobile] = useState(false);
@@ -196,6 +197,7 @@ function App() {
         <div className="wave"></div>
       </div>
     </div>
+    <PrivacyPopup />
     </>
   );
 }
