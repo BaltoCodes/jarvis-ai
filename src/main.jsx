@@ -7,7 +7,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthNavigate } from './AuthNavigate.jsx'
 
 
-
+const [googleKey, setGoogleKey] = useState(null);
 const login = async () => {
   const res = await fetch('http://localhost:5000/api/login', { method: 'POST' });
   const data = await res.json();
@@ -25,8 +25,11 @@ const fetchSecureData = async () => {
   return data.key
 };
 
-await login();
-const GOOGLE_KEY = await fetchSecureData();
+(async () => {
+  await login();
+  const GOOGLE_KEY = await fetchSecureData();
+  setGoogleKey(GOOGLE_KEY)
+})()
 
 const router = createBrowserRouter(
   [
@@ -50,7 +53,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   
     <StrictMode>
-        <GoogleOAuthProvider clientId={GOOGLE_KEY}>
+        <GoogleOAuthProvider clientId={googleKey}>
           <RouterProvider router={router} />
         </GoogleOAuthProvider>
     </StrictMode>
