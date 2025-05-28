@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, use } from 'react';
 import './App.css';
 import socket from "./socket";
 import PrivacyPopup from './components/PrivacyPopUp';
+import UserPopup from './components/UserPopUp';
 
 function App() {
   const [isMobile, setIsMobile] = useState(false);
@@ -10,7 +11,10 @@ function App() {
   const audioChunksRef = useRef([]);
   const [resultText, setResultText] = useState(null)
   const [output, setOutput] = useState("");
-
+  const [showUserPopup, setShowUserPopup] = useState(true);
+  const [errorPopUp, setErrorPopUp] = useState("");
+  const urlProd = "http://35.173.186.121:5000/understand-message-google"
+  const urlDev = "http://127.0.0.1:5000/understand-message-google"
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -76,7 +80,7 @@ function App() {
       const formData = new FormData();
       console.log('Type : ', audioBlob.mimeType)
       formData.append("audio", audioBlob, "message.webm");
-      const resultText = await fetch("http://35.173.186.121:5000/understand-message-google", {
+      const resultText = await fetch(urlProd, {
         method: "POST",
         body: formData,
       });
@@ -85,6 +89,10 @@ function App() {
       if (data.status_code === 422) {
         setResultText("Message was not properly understood, please try again");
       } 
+      else if (data.message === "No user detected"){
+        setShowUserPopup(true);
+        setUserUndetected(data.user)
+      }
       else if (data.message) {
         setResultText(data.message)
       }else {
@@ -116,7 +124,7 @@ function App() {
 
       const formData = new FormData();
       formData.append("audio", audioBlob, "message.webm");
-      const resultText = await fetch("http://35.173.186.121:5000/understand-message-google", {   //35.173.186.121
+      const resultText = await fetch(urlProd, {   //35.173.186.121
         method: "POST",
         body: formData,
       });
@@ -139,6 +147,7 @@ function App() {
     mediaRecorderRef.current.stop();
     setIsRecording(false);
   };
+
 
   return (
     <>
@@ -170,26 +179,46 @@ function App() {
           </button>
         ) : (
           // Version desktop - deux boutons
-          <div className="flex space-x-6">
-            <button
-              onClick={handleStartRecording}
-              className={`px-6 py-3 rounded-lg text-lg font-medium transition-all duration-300 ${
-                isRecording ? 'bg-green-600 hover:bg-green-700' : 'bg-[#9f0f0f] hover:bg-blue-700'
-              }`}
-            >
-             {isRecording ? 'Enregistrement en cours...' : 'Enregistrer'}
-            </button>
-            <button
-              onClick={handleStopRecording}
-              className="px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-lg text-lg font-medium transition-all duration-300"
-            >
-              Arrêter
-            </button>
-          </div>
+        <div className="flex space-x-6">
+          <button
+            onClick={handleStartRecording}
+            className={`relative px-6 py-3 rounded-xl text-lg font-medium overflow-hidden transition-all duration-300 border ${
+              isRecording
+                ? 'bg-green-600 border-green-400 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/40'
+                : 'bg-[#1a1a1a] border-red-500 hover:bg-[#2a2a2a] hover:shadow-lg hover:shadow-red-500/40'
+            } text-white`}
+          >
+            <span className="absolute inset-0 bg-gradient-to-tr from-transparent to-red-500 opacity-10 group-hover:opacity-20 blur-md"></span>
+            <span className="relative z-10">
+              {isRecording ? 'Enregistrement en cours...' : 'Enregistrer'}
+            </span>
+          </button>
+
+          <button
+            onClick={handleStopRecording}
+            className="relative px-6 py-3 rounded-xl text-lg font-medium text-white bg-zinc-800 border border-zinc-600 hover:bg-zinc-700 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/40"
+          >
+            <span className="absolute inset-0 bg-gradient-to-tr from-transparent to-cyan-500 opacity-10 group-hover:opacity-20 blur-md"></span>
+            <span className="relative z-10">Arrêter</span>
+          </button>
+        </div>
+
         )}
       </div>
       {output && <p className="text-xl font-italic">{output}</p>}
       {resultText && <p className="text-xl font-italic">{resultText}</p>}
+      {showUserPopup && <UserPopup userPopUp={showUserPopup} setUserPopUp={setShowUserPopup} setErrorPopUp={setErrorPopUp}/>}
+      {errorPopUp && (
+        <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 bg-red-600 text-white shadow-lg border rounded-xl p-4 max-w-md w-full z-50">
+          <p className="text-sm">{errorPopUp}</p>
+          <button
+            onClick={() => setErrorPopUp("")}
+            className="mt-2 px-4 py-2 bg-white text-red-600 rounded-lg hover:bg-gray-200 transition"
+          >
+            Fermer
+          </button>
+        </div>
+      )}
 
       {/* Vagues animées en arrière-plan */}
       <div className="absolute bottom-0 left-0 right-0 h-64 overflow-hidden">

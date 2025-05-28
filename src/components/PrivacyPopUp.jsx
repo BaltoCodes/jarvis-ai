@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import Google from "./Google.jsx";
 export default function PrivacyPopup() {
   const [visible, setVisible] = useState(false);
 
@@ -34,7 +34,7 @@ export default function PrivacyPopup() {
     setVisible(false);
   };
 
-  //if (!visible) return null;
+  if (!visible) return null;
 
   return (
     <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-6 md:bottom-6 bg-white shadow-lg border rounded-xl p-4 max-w-md w-full z-50">

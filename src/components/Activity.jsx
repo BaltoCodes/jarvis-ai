@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 export default function ActivityTracker() {
-  const [report, setReport] = useState({});
 
   useEffect(() => {
     const startTime = Date.now();
@@ -36,7 +35,7 @@ export default function ActivityTracker() {
         durationSeconds: duration,
       };
 
-      navigator.sendBeacon("https://your-server.com/api/activity", JSON.stringify(finalReport));
+      navigator.sendBeacon("http://35.173.186.121/api/rapport/activity-tracker", JSON.stringify(finalReport));
     });
 
     return () => {
