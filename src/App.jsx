@@ -13,7 +13,7 @@ function App() {
   const [output, setOutput] = useState("");
   const [showUserPopup, setShowUserPopup] = useState(true);
   const [errorPopUp, setErrorPopUp] = useState("");
-  const urlProd = "http://35.173.186.121:5000/understand-message-google"
+  const urlProd = "https://jarvis-ai.eu/understand-message-google"
   const urlDev = "http://127.0.0.1:5000/understand-message-google"
 
   useEffect(() => {
