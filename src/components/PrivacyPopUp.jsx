@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import Google from "./Google.jsx";
 export default function PrivacyPopup() {
   const [visible, setVisible] = useState(false);
-
+  const urlProd = "https://jarvis-ai.eu"
+  const urlDev = "http://127.0.0.1:5000"
   useEffect(() => {
     const accepted = localStorage.getItem("privacyAccepted");
     if (!accepted) {
@@ -12,7 +13,7 @@ export default function PrivacyPopup() {
 
   const sendConsentToServer = async () => {
     try {
-      await fetch("http://35.173.186.121/api/jarvis/activity/user", {
+      await fetch(urlProd + "/api/jarvis/activity/user", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

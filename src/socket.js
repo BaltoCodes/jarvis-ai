@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-const urlProd = "https://35.173.186.121:5000"
+const urlProd = "https://jarvis-ai.eu"
 const urlDev = "http://127.0.0.1:5000"
 
 const socket = io(urlProd, {

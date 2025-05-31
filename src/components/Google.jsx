@@ -8,13 +8,14 @@ import { useContext } from "react";
 
 export default function Google({setCloseSignUpForm, setErrorPopup}) {
     const {isAuthenticated, login, setUserInfo, simpleLogin} = useContext(AuthContext);
-    
+    const urlProd = "https://jarvis-ai.eu"
+    const urlDev = "http://127.0.0.1:5000"
     const handleCredentialResponse = async (credentialResponse) => {
         try {
           const jwtCredential = jwtDecode(credentialResponse.credential)
           const response = await axios({
             method: 'post',
-            url: 'http://127.0.0.1:5000/api/post/jarvis/users' ,
+            url: urlProd + '/api/post/jarvis/users' ,
             headers: {'Content-Type': 'application/json'},
             data: {
               email : jwtCredential.email,

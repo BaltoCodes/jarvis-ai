@@ -1,42 +1,17 @@
-import { StrictMode } from 'react'
-import './index.css'
-import App from './App.jsx'
+import React, { StrictMode, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import './index.css';
+import App from './App.jsx';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { AuthNavigate } from './AuthNavigate.jsx'
-
-
-const [googleKey, setGoogleKey] = useState(null);
-const login = async () => {
-  const res = await fetch('http://localhost:5000/api/login', { method: 'POST' });
-  const data = await res.json();
-  localStorage.setItem('token', data.token);
-};
-
-const fetchSecureData = async () => {
-  const token = localStorage.getItem('token');
-  const res = await fetch('http://localhost:5000/api/secure-data', {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
-  const data = await res.json();
-  return data.key
-};
-
-(async () => {
-  await login();
-  const GOOGLE_KEY = await fetchSecureData();
-  setGoogleKey(GOOGLE_KEY)
-})()
+import { AuthNavigate } from './AuthNavigate.jsx';
 
 const router = createBrowserRouter(
   [
-    {element: <AuthNavigate />,
-      children : [
-      { path: '/', element: <App /> },
-
+    {
+      element: <AuthNavigate />,
+      children: [
+        { path: '/', element: <App /> },
       ],
     },
   ],
@@ -48,13 +23,45 @@ const router = createBrowserRouter(
   }
 );
 
+const RootApp = () => {
+  const [googleKey, setGoogleKey] = useState(null);
+  const urlProd = "https://jarvis-ai.eu"
+  const urlDev = "http://127.0.0.1:5000"
+  useEffect(() => {
+    const loginAndFetchKey = async () => {
+      try {
+        const loginRes = await fetch(urlProd + '/api/login', {
+          method: 'POST',
+        });
+        const loginData = await loginRes.json();
+        localStorage.setItem('token', loginData.token);
+
+        const token = loginData.token;
+        const keyRes = await fetch(urlProd + '/api/secure-data', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const keyData = await keyRes.json();
+        setGoogleKey(keyData.key);
+      } catch (err) {
+        console.error('Erreur lors de la récupération de la clé Google:', err);
+      }
+    };
+
+    loginAndFetchKey();
+  }, []);
+
+  if (!googleKey) return null; // ou un spinner
+
+  return (
+    <StrictMode>
+      <GoogleOAuthProvider clientId={googleKey}>
+        <RouterProvider router={router} />
+      </GoogleOAuthProvider>
+    </StrictMode>
+  );
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  
-    <StrictMode>
-        <GoogleOAuthProvider clientId={googleKey}>
-          <RouterProvider router={router} />
-        </GoogleOAuthProvider>
-    </StrictMode>
-);
+root.render(<RootApp />);

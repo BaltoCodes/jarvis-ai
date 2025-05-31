@@ -15,29 +15,14 @@ export const AuthProvider = ({ children }) => {
     return storedUser ? true : false
   }
   );
-  const getUserExistence = async (userAddress) => {
-    try {
-      const response = await axios({
-        method: 'post',
-        url: 'http://localhost:5000/api/jarvis/users' ,
-        headers: {'Content-Type': 'application/json'},
-        data: {
-          address : userAddress ? userAddress : 'Unknown-address',
-        }
-      });
-      return response.data.message;
-    } catch (error) {
-      console.log(error)
-      return null;
-    }
-  }
-
+  const urlProd = "https://jarvis-ai.eu"
+  const urlDev = "http://127.0.0.1:5000"
 
   const getUserData = async (userAddress) => {
     try {
       const response = await axios({
         method: 'post',
-        url: 'http://localhost:5000/api/jarvis/user/info' ,
+        url: urlProd + '/api/jarvis/user/info' ,
         headers: {'Content-Type': 'application/json'},
         data: {
           address : userAddress ? userAddress : 'Unknown-address',
@@ -50,23 +35,6 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
-  const getUserEvents = async (userAddress) => {
-    try {
-      const response = await axios({
-        method: 'post',
-        url: 'http://localhost:5000/api/user/events' ,
-        headers: {'Content-Type': 'application/json'},
-        data: {
-          address : userAddress ? userAddress : 'Unknown-address',
-        }
-      });
-
-      return response.data;
-    } catch (error) {
-      console.log(error)
-      return null;
-    }
-  }
 
 
 
