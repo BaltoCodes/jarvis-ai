@@ -11,20 +11,20 @@ function App() {
   const audioChunksRef = useRef([]);
   const [resultText, setResultText] = useState(null)
   const [output, setOutput] = useState("");
-  const [showUserPopup, setShowUserPopup] = useState(true);
+  const [showUserPopup, setShowUserPopup] = useState(false);
   const [errorPopUp, setErrorPopUp] = useState("");
   const urlProd = "https://jarvis-ai.eu/understand-message-google"
   const urlDev = "http://127.0.0.1:5000/understand-message-google"
 
   useEffect(() => {
-    socket.on("connect", () => {
+    socket.on("ws/connect", () => {
       console.log("Connecté au serveur WebSocket");
     });
 
-    socket.on("transcript", () => {
+    socket.on("ws/transcript", () => {
       console.log("Receiving packets");
     });
-    socket.on("stream_data", (message) => {
+    socket.on("ws/stream_data", (message) => {
       let chunk = message.data.content;
       const unwantedPatterns = [
         /oyer"/g,
@@ -47,8 +47,8 @@ function App() {
     });
 
     return () => {
-      socket.off("transcript");
-      socket.off("connect");
+      socket.off("ws/transcript");
+      socket.off("ws/connect");
     };
   }, []);
 

@@ -5,7 +5,6 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState(null);
-  const [userEvents, setUserEvents] = useState(null);
   const [user, setUser] = useState(() =>{    
     const storedUser = localStorage.getItem('user')
     return storedUser ? JSON.parse(storedUser) : null
@@ -64,15 +63,8 @@ export const AuthProvider = ({ children }) => {
         setUserInfo(userInfo);
       }
     };
-    const fetchUserEvents = async () => {
-      if (user) {
-        const userEvents = await getUserEvents(user);
-        setUserEvents(userEvents)
-      }
-      
-    }
+
     fetchUserInfo();
-    fetchUserEvents();
     
   }, []);
 
@@ -87,7 +79,7 @@ export const AuthProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user,  login, logout,  userInfo, userEvents, setUserInfo, simpleLogin }}>
+    <AuthContext.Provider value={{ isAuthenticated, user,  login, logout,  userInfo, setUserInfo, simpleLogin }}>
       {children}
     </AuthContext.Provider>
   );
